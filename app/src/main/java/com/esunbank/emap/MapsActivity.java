@@ -1,9 +1,13 @@
 package com.esunbank.emap;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.esunbank.emap.dao.FirebaseDAO;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,9 +44,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         // Add a marker in Sydney and move the camera
 
+        FirebaseDAO firebaseDAO = new FirebaseDAO();
+        firebaseDAO.getInstance();
+
+
         LatLng sydney = new LatLng(25.064500, 121.520398);
         mMap.addMarker(new MarkerOptions().position(sydney).title("垃圾場"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+//        mMap.getUiSettings().setCompassEnabled(true);
     }
 }
