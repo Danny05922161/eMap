@@ -1,19 +1,19 @@
 package com.esunbank.emap;
 
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-
 import androidx.fragment.app.FragmentActivity;
 
-import com.esunbank.emap.dao.FirebaseDAO;
+import android.os.Bundle;
+
+import com.esunbank.emap.DTO.User;
+import com.esunbank.emap.database.DataStore;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -41,18 +41,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        FirebaseConnector firebaseConnector = new FirebaseConnector();
+        List<User> users = firebaseConnector.getConnect();
+        DataStore.getInstance().setUsers(users);
+
         mMap = googleMap;
+
         // Add a marker in Sydney and move the camera
-
-        FirebaseDAO firebaseDAO = new FirebaseDAO();
-        firebaseDAO.getInstance();
-
-
+        for(User user:users){
+            LatLng sydney = new LatLng(Double.parseDouble(user.getLat()), Double.parseDouble(user.getLng()));
+            mMap.addMarker(new MarkerOptions().position(sydney).title(user.getName()));
+        }
         LatLng sydney = new LatLng(25.064500, 121.520398);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("垃圾場"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
         mMap.getUiSettings().setZoomControlsEnabled(true);
-//        mMap.getUiSettings().setCompassEnabled(true);
     }
+
+
 }
