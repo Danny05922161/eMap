@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.esunbank.emap.DTO.Appointment;
 import com.esunbank.emap.canlendar.DrawableCalendarEvent;
 import com.esunbank.emap.canlendar.DrawableEventRenderer;
+import com.esunbank.emap.database.DataStore;
 import com.github.tibolte.agendacalendarview.AgendaCalendarView;
 import com.github.tibolte.agendacalendarview.CalendarManager;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
@@ -20,6 +22,8 @@ import com.esunbank.emap.canlendar.IWeekItem;
 import com.github.tibolte.agendacalendarview.models.WeekItem;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -36,6 +40,7 @@ public class AppointFragment extends Fragment implements CalendarPickerControlle
     private View view;
     private Activity activity;
     private AgendaCalendarView mAgendaCalendarView;
+    private DataStore dataStore = DataStore.getInstance();
     // region Interface - CalendarPickerController
 
     @Override
@@ -85,29 +90,44 @@ public class AppointFragment extends Fragment implements CalendarPickerControlle
     // region Private Methods
 
     private void mockList(List<CalendarEvent> eventList) {
-        Calendar startTime1 = Calendar.getInstance();
-        Calendar endTime1 = Calendar.getInstance();
-        endTime1.add(Calendar.MONTH, 1);
-        BaseCalendarEvent event1 = new BaseCalendarEvent("Thibault travels in Iceland", "A wonderful journey!", "Iceland",
-                ContextCompat.getColor(getContext(), R.color.orange_dark), startTime1, endTime1, true);
-        eventList.add(event1);
 
-        Calendar startTime2 = Calendar.getInstance();
-        startTime2.add(Calendar.DAY_OF_YEAR, 1);
-        Calendar endTime2 = Calendar.getInstance();
-        endTime2.add(Calendar.DAY_OF_YEAR, 3);
-        BaseCalendarEvent event2 = new BaseCalendarEvent("Visit to Dalvík", "A beautiful small town", "Dalvík",
-                ContextCompat.getColor(getContext(), R.color.yellow), startTime2, endTime2, true);
-        eventList.add(event2);
+        for (Appointment appointment: dataStore.getAppointmentList()){
+            Calendar startTime = Calendar.getInstance();
+            Calendar endTime = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd h:m a", Locale.ENGLISH);
+            try {
+                String date =appointment.getDate()+" "+appointment.getTime();
+                startTime.setTime(sdf.parse(date));
+                endTime.setTime(sdf.parse(date));
+                endTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        Calendar startTime3 = Calendar.getInstance();
-        Calendar endTime3 = Calendar.getInstance();
-        startTime3.set(Calendar.HOUR_OF_DAY, 14);
-        startTime3.set(Calendar.MINUTE, 0);
-        endTime3.set(Calendar.HOUR_OF_DAY, 15);
-        endTime3.set(Calendar.MINUTE, 0);
-        DrawableCalendarEvent event3 = new DrawableCalendarEvent("Visit of Harpa", "", "Dalvík",
-                ContextCompat.getColor(getContext(), R.color.blue_dark), startTime3, endTime3, false, android.R.drawable.ic_dialog_info);
-        eventList.add(event3);
+                BaseCalendarEvent event = new BaseCalendarEvent(appointment.getMember(), "顧客預約",appointment.getLocation(),
+                        ContextCompat.getColor(getContext(), R.color.blue_dark), startTime, endTime, true);
+                eventList.add(event);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+//
+//        Calendar startTime2 = Calendar.getInstance();
+//        startTime2.add(Calendar.DAY_OF_YEAR, 1);
+//        Calendar endTime2 = Calendar.getInstance();
+//        endTime2.add(Calendar.DAY_OF_YEAR, 3);
+//        BaseCalendarEvent event2 = new BaseCalendarEvent("Visit to Dalvík", "A beautiful small town", "Dalvík",
+//                ContextCompat.getColor(getContext(), R.color.yellow), startTime2, endTime2, true);
+//        eventList.add(event2);
+//
+//        Calendar startTime3 = Calendar.getInstance();
+//        Calendar endTime3 = Calendar.getInstance();
+//        startTime3.set(Calendar.HOUR_OF_DAY, 14);
+//        startTime3.set(Calendar.MINUTE, 0);
+//        endTime3.set(Calendar.HOUR_OF_DAY, 15);
+//        endTime3.set(Calendar.MINUTE, 0);
+//        DrawableCalendarEvent event3 = new DrawableCalendarEvent("Visit of Harpa", "", "Dalvík",
+//                ContextCompat.getColor(getContext(), R.color.blue_dark), startTime3, endTime3, false, android.R.drawable.ic_dialog_info);
+//        eventList.add(event3);
     }
 }

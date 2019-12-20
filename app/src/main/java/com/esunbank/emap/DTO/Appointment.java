@@ -3,8 +3,9 @@ package com.esunbank.emap.DTO;
 public class Appointment {
     private String member;
     private String name;
-    private String startDate;
-    private String endDate;
+    private String Date;
+    private String Time;
+    private String location;
 
     public String getMember() {
         return member;
@@ -22,19 +23,27 @@ public class Appointment {
         this.name = name;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public String getDate() {
+        return Date;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setDate(String date) {
+        Date = date;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getTime() {
+        return Time;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setTime(String time) {
+        Time = time;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

@@ -16,4 +16,7 @@
     <string name="re_type_password">Re-type Password</string>
     <string name="your_name">Full Name</string>
     <string name="appoint_activity">appoint</string>
+    <string name="date">選擇日期</string>
+    <string name="time_select">選擇時間</string>
+    <string name="submit">確認預約</string>
 </resources>

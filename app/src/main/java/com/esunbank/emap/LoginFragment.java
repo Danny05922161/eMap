@@ -36,6 +36,7 @@ import androidx.fragment.app.Fragment;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_login, container, false);
+        final TextView messageTextView = (TextView) view.findViewById(R.id.tv_subtitle);
         final TextView eMailTextView = (TextView) view.findViewById(R.id.et_email);
         final TextView passWordTextView = (TextView) view.findViewById(R.id.et_password);
         Button loginButton = (Button) view.findViewById(R.id.btn_login);
@@ -51,6 +52,8 @@ import androidx.fragment.app.Fragment;
                         Intent intent = new Intent(activity, MapsActivity.class);
                         activity.startActivity(intent);
                         activity.finish();
+                    }else {
+                        messageTextView.setText("沒有此帳號");
                     }
                 }
             }
