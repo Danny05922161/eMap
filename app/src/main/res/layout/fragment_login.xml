@@ -31,14 +31,15 @@
         android:id="@+id/et_email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="@string/e_mail"
+        android:layout_above="@id/et_password"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:padding="15dp"
-        android:inputType="textEmailAddress"
-        android:fontFamily="@font/roboto_regular"
-        android:layout_above="@id/et_password"
         android:background="@drawable/et_custom"
+        android:fontFamily="@font/roboto_regular"
+        android:hint="@string/e_mail"
+        android:inputType="textEmailAddress"
+        android:padding="15dp"
+        android:text="danny89019"
         android:textSize="15sp" />
 
     <EditText

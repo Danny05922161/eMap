@@ -17,6 +17,11 @@ public class DataStore {
     synchronized static public DataStore getInstance() {
         if (dataStore == null) {
             dataStore = new DataStore();
+            LoginUser loginUser = new LoginUser();
+            loginUser.setEmail("danny89019");
+            loginUser.setPassword("abc12345");
+            loginUser.setAccount("danny89019");
+            dataStore.appendLoginUsers(loginUser);
         }
         return dataStore;
     }

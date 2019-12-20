@@ -47,6 +47,7 @@ import androidx.fragment.app.Fragment;
                 DataStore dataStore= DataStore.getInstance();
                 for(LoginUser loginUser :dataStore.getLoginUsers()){
                     if(loginUser.getEmail().equals(eMailTextView.getText().toString())){
+                        dataStore.setLoginAccount(eMailTextView.getText().toString());
                         Intent intent = new Intent(activity, MapsActivity.class);
                         activity.startActivity(intent);
                         activity.finish();
