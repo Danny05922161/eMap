@@ -16,15 +16,20 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private View view;
     private GoogleMap mMap;
+    private List<Marker> markerList = new ArrayList<Marker>();
+    private BottomSheetBehavior bottomSheetBehavior;
     private DataStore dataStore = DataStore.getInstance();
 
 
@@ -33,6 +38,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_map, container, false);
+        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.bottomSheetLayout));
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
@@ -49,11 +55,32 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         for(User user:users){
             LatLng sydney = new LatLng(Double.parseDouble(user.getLat()), Double.parseDouble(user.getLng()));
-            mMap.addMarker(new MarkerOptions().position(sydney).title(user.getName()));
+            Marker marker = mMap.addMarker(new MarkerOptions().position(sydney).title(user.getName()));
+            markerList.add(marker);
         }
         LatLng sydney = new LatLng(25.064500, 121.520398);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
         mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setOnMarkerClickListener(this);
+    }
+
+
+    @Override
+    public boolean onMarkerClick (Marker marker){
+        for(Marker tarMarker :markerList) {
+            if (marker.getPosition().toString().equals(tarMarker.getPosition().toString())) {
+                //handle click here
+                System.out.print("postion:"+tarMarker.getPosition().toString());
+                System.out.print("id:"+tarMarker.getId());
+                System.out.print("title: "+tarMarker.getTitle());
+
+                dataStore.getUsers();
+
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                return true;
+            }
+        }
+        return false;
     }
 }

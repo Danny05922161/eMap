@@ -31,17 +31,15 @@ public class MapsActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private DataStore dataStore = DataStore.getInstance();
+    private FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        assert mapFragment != null;
-//        mapFragment.getMapAsync(this);
-        FragmentManager fm = getSupportFragmentManager();
-        final FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        getSupportActionBar().hide();
+        fm = getSupportFragmentManager();
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
@@ -56,13 +54,19 @@ public class MapsActivity extends AppCompatActivity {
                 // 依照id判斷點了哪個項目並做相應事件
                 if (id == R.id.home) {
                     // 按下「首頁」要做的事
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_place,new MapsFragment());
+                    fragmentTransaction.commit();
                     return true;
                 } else if (id == R.id.appoint) {
                     // 按下「預約」要做的事
+                    System.out.println("Change!");
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_place,new AppointFragment());
+                    fragmentTransaction.commit();
                     return true;
                 } else {
-                    changeActivity();
+                    changeActivity(MainActivity.class);
                 }
                 return false;
             }
@@ -72,8 +76,8 @@ public class MapsActivity extends AppCompatActivity {
 
     }
 
-    private void changeActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
+    private void changeActivity(Class classObject){
+        Intent intent = new Intent(this, classObject);
         startActivity(intent);
         finish();
     }
@@ -87,27 +91,6 @@ public class MapsActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        FirebaseConnector firebaseConnector = new FirebaseConnector();
-//        List<User> users = firebaseConnector.getConnect();
-//        dataStore.setUsers(users);
-//
-//        mMap = googleMap;
-//
-//        // Add a marker in Sydney and move the camera
-//        for(User user:users){
-//            LatLng sydney = new LatLng(Double.parseDouble(user.getLat()), Double.parseDouble(user.getLng()));
-//            mMap.addMarker(new MarkerOptions().position(sydney).title(user.getName()));
-//        }
-//        LatLng sydney = new LatLng(25.064500, 121.520398);
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
-//        mMap.getUiSettings().setZoomControlsEnabled(true);
-//    }
 
 
 }
